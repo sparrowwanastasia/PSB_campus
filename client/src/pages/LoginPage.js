@@ -26,7 +26,7 @@ function LoginPage({ onLogin, currentUser }) {
     }
   };
 
-  return (
+   return (
     <div className="login-root">
       <header className="login-header">
         <div className="login-header-title">PSB Campus</div>
@@ -60,7 +60,7 @@ function LoginPage({ onLogin, currentUser }) {
             onClick={handleLogin}
             disabled={!selectedId}
           >
-            Войти
+            Войти в систему
           </button>
 
           {currentUser && (
@@ -70,6 +70,12 @@ function LoginPage({ onLogin, currentUser }) {
           )}
         </div>
       </main>
+
+      {/* Геометрические элементы фона */}
+      <div className="login-geometric-element geometric-1"></div>
+      <div className="login-geometric-element geometric-2"></div>
+      <div className="login-geometric-element geometric-3"></div>
+      <div className="login-geometric-element geometric-4"></div>
 
       <footer className="login-footer">
         Платформа реализации учебного процесса для ПСБ
