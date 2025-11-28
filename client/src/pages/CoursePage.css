@@ -108,24 +108,119 @@
   text-decoration: underline;
 }
 
-/* Триколоночный layout */
+/* ---------- ТУЛБАР ВИДЖЕТОВ ---------- */
+
+.cp-toolbar {
+  margin-top: 8px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cp-toolbar-label {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.cp-add-widget-btn {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  background: #eef2ff;
+  color: #4f46e5;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(148, 163, 184, 0.4);
+}
+
+.cp-add-widget-btn:hover {
+  background: #e0e7ff;
+}
+.cp-add-widget-btn--disabled {
+  opacity: 0.6;
+  cursor: default;
+  box-shadow: none;
+}
+
+.cp-add-widget-plus {
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* ---------- ТРИ ВИДЖЕТА (перетаскиваемые) ---------- */
 
 .cp-layout {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: 240px minmax(0, 1fr) 280px;
+  margin-top: 8px;
+  display: flex;
   gap: 16px;
   align-items: flex-start;
 }
 
-/* Левая панель прогресса */
+/* Левая панель прогресса — фиксированная ширина */
 
 .cp-progress-sidebar {
   background: #ffffff;
   border-radius: 18px;
   box-shadow: 0 10px 30px rgba(148, 163, 184, 0.35);
   padding: 16px;
+  flex: 0 0 240px;
 }
+
+/* Центральный блок (задания + детали) — растягивается */
+
+.cp-center {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 16px;
+  align-items: flex-start;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Правая панель чата — фиксированная */
+
+.cp-chat-panel {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(148, 163, 184, 0.35);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 520px;
+  flex: 0 0 280px;
+}
+
+/* Дополнительный виджет "Заметки" — тоже фиксированной ширины */
+
+.cp-notes-panel {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(148, 163, 184, 0.35);
+  padding: 14px;
+  flex: 0 0 260px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cp-notes-input {
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  padding: 6px 8px;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.cp-notes-textarea {
+  min-height: 140px;
+}
+
+/* ---------- Содержимое прогресса ---------- */
 
 .cp-sidebar-title {
   font-size: 15px;
@@ -161,8 +256,6 @@
   font-weight: 700;
 }
 
-/* статус под кругом */
-
 .cp-progress-status {
   text-align: center;
   font-size: 13px;
@@ -183,14 +276,7 @@
   margin-bottom: 4px;
 }
 
-/* Центр: список заданий + панель задания */
-
-.cp-center {
-  display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  gap: 16px;
-  align-items: flex-start;
-}
+/* ---------- Список заданий + панель ---------- */
 
 .cp-sidebar {
   background: #ffffff;
@@ -384,18 +470,7 @@
   overflow: hidden;
 }
 
-/* ПРАВАЯ ПАНЕЛЬ: чат */
-
-.cp-chat-panel {
-  background: #ffffff;
-  border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(148, 163, 184, 0.35);
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  max-height: 520px;
-}
+/* ---------- ЧАТ (контент) ---------- */
 
 .cp-chat-messages {
   flex: 1;
