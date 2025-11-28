@@ -70,11 +70,46 @@ class Submission(models.Model):
         related_name='submissions',
         limit_choices_to={'role': 'student'}
     )
-    answer_text = models.TextField()
     submitted_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='submitted')
-    grade = models.FloatField(null=True, blank=True)
     feedback = models.TextField(null=True, blank=True)
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
+    student = models.ForeignKey(Person, on_delete=models.CASCADE)
+    answer_text = models.TextField(blank=True)
+    file = models.FileField(upload_to='submissions/', blank=True, null=True)  # ← НОВОЕ
+    grade = models.IntegerField(blank=True, null=True)
+    status = models.CharField(max_length=20, default="submitted")
+    teacher_comment = models.TextField(blank=True)
+    submitted_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Submission #{self.id} by {self.student} for {self.assignment}"
+class CourseMaterial(models.Model):
+    MATERIAL_TYPES = [
+        ('text', 'Текст'),
+        ('video', 'Видео'),
+        ('file', 'Файл'),
+        ('link', 'Ссылка'),
+    ]
+
+    course = models.ForeignKey(
+        Course,
+        related_name="materials",
+        on_delete=models.CASCADE,
+    )
+    title = models.CharField(max_length=255)
+    material_type = models.CharField(
+        max_length=10,
+        choices=MATERIAL_TYPES,
+        default='text',
+    )
+
+    # разные варианты контента, используем то, что нужно
+    text = models.TextField(blank=True)
+    file = models.FileField(upload_to='materials/', blank=True, null=True)
+    url = models.URLField(blank=True)
+
+    order = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.course.title} – {self.title}"

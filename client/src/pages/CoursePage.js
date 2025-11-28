@@ -1,34 +1,82 @@
+// client/src/pages/CoursePage.js
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   fetchAssignmentsByCourse,
   createSubmission,
   fetchSubmissionsByAssignment,
-  fetchStudents,
-  addStudentToCourse,
+  gradeSubmission,
+  fetchMaterialsByCourse,
 } from "../api";
+import "./CoursePage.css";
+
+// ДЕМО-материалы и задания, если с бэка пришёл пустой список
+const DEMO_MATERIALS = [
+  {
+    id: "demo-m-1",
+    title: "Лекция 1. Введение в тему курса",
+    material_type: "text",
+    text:
+      "Краткий конспект первой лекции. Здесь студент видит основные определения, " +
+      "ключевые формулы и примеры.\n\n" +
+      "• Определение 1\n• Определение 2\n• Пример задачи.",
+  },
+  {
+    id: "demo-m-2",
+    title: "Видео: популярное объяснение темы",
+    material_type: "video",
+    url: "https://www.youtube.com/watch?v=Usu9xZfabPM",
+  },
+  {
+    id: "demo-m-3",
+    title: "Полезная ссылка: конспекты и задачи",
+    material_type: "link",
+    url: "https://mipt.ru/education/chair/physics/materials/",
+  },
+];
+
+const DEMO_ASSIGNMENTS = [
+  {
+    id: "demo-a-1",
+    title: "Домашнее задание 1: базовые понятия",
+    description:
+      "1) В двух абзацах опишите, что такое основная тема курса.\n" +
+      "2) Приведите пример из жизни, где это знание пригодится.\n" +
+      "3) Сформулируйте три вопроса по материалам.",
+    due_date: "2025-12-01",
+  },
+  {
+    id: "demo-a-2",
+    title: "Домашнее задание 2: практическая задача",
+    description:
+      "Решите практическую задачу по теме курса. Можно приложить решение " +
+      "в PDF, DOCX, картинку или архив с кодом.\n\n" +
+      "Формат сдачи: текстовое описание + прикреплённый файл.",
+    due_date: "2025-12-05",
+  },
+];
 
 function CoursePage({ currentUser }) {
   const { courseId } = useParams();
   const [assignments, setAssignments] = useState([]);
+  const [materials, setMaterials] = useState([]);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
   const [answerText, setAnswerText] = useState("");
+  const [file, setFile] = useState(null);
   const [submissions, setSubmissions] = useState([]);
-
-  const [students, setStudents] = useState([]);
-  const [selectedStudentId, setSelectedStudentId] = useState("");
+  const [gradeBySubmission, setGradeBySubmission] = useState({});
+  const [commentBySubmission, setCommentBySubmission] = useState({});
 
   useEffect(() => {
+    // Загружаем задания и материалы
     fetchAssignmentsByCourse(courseId)
       .then((res) => setAssignments(res.data))
       .catch((err) => console.error(err));
 
-    if (currentUser.role === "teacher") {
-      fetchStudents()
-        .then((res) => setStudents(res.data))
-        .catch((err) => console.error(err));
-    }
-  }, [courseId, currentUser.role]);
+    fetchMaterialsByCourse(courseId)
+      .then((res) => setMaterials(res.data))
+      .catch((err) => console.error(err));
+  }, [courseId]);
 
   const loadSubmissions = (assignmentId) => {
     fetchSubmissionsByAssignment(assignmentId)
@@ -38,130 +86,321 @@ function CoursePage({ currentUser }) {
 
   const handleSelectAssignment = (assignment) => {
     setSelectedAssignment(assignment);
+    setAnswerText("");
+    setFile(null);
+    setSubmissions([]);
     if (currentUser.role === "teacher") {
       loadSubmissions(assignment.id);
     }
   };
 
   const handleSubmit = async () => {
-    if (!selectedAssignment) return;
+    if (!selectedAssignment || (!answerText && !file)) return;
     try {
       await createSubmission({
-        assignment: selectedAssignment.id,
+        assignment:
+          typeof selectedAssignment.id === "string"
+            ? null // демо-задание нельзя отправить на бэк
+            : selectedAssignment.id,
         student: currentUser.id,
         answer_text: answerText,
+        file: file || undefined,
       });
-      alert("Решение отправлено!");
+      alert("Решение отправлено! (для демо достаточно показа этого сценария)");
       setAnswerText("");
+      setFile(null);
     } catch (e) {
       console.error(e);
-      alert("Ошибка при отправке");
+      alert("Ошибка при отправке решения");
     }
   };
 
-  const handleAddStudentToCourse = async () => {
-    if (!selectedStudentId) return;
+  const handleChangeGrade = (submissionId, value) => {
+    setGradeBySubmission((prev) => ({
+      ...prev,
+      [submissionId]: value,
+    }));
+  };
+
+  const handleChangeComment = (submissionId, value) => {
+    setCommentBySubmission((prev) => ({
+      ...prev,
+      [submissionId]: value,
+    }));
+  };
+
+  const handleGradeSubmission = async (submissionId) => {
+    const gradeVal = gradeBySubmission[submissionId];
+    const commentVal = commentBySubmission[submissionId] || "";
+
     try {
-      await addStudentToCourse(courseId, selectedStudentId);
-      alert("Студент назначен на курс");
+      await gradeSubmission(submissionId, {
+        grade: gradeVal || null,
+        status: "graded",
+        teacher_comment: commentVal,
+      });
+      alert("Оценка сохранена");
+      if (selectedAssignment && typeof selectedAssignment.id !== "string") {
+        loadSubmissions(selectedAssignment.id);
+      }
     } catch (e) {
       console.error(e);
-      alert("Ошибка при назначении студента");
+      alert("Ошибка при сохранении оценки");
     }
   };
+
+  const displayMaterials =
+    materials && materials.length > 0 ? materials : DEMO_MATERIALS;
+
+  const displayAssignments =
+    assignments && assignments.length > 0 ? assignments : DEMO_ASSIGNMENTS;
 
   return (
-    <div style={{ padding: 24 }}>
-      <h2>Курс #{courseId}</h2>
-
-      <div style={{ display: "flex", gap: 32, alignItems: "flex-start" }}>
-        {/* Список заданий */}
-        <div style={{ flex: 1 }}>
-          <h3>Задания</h3>
-          <ul>
-            {assignments.map((a) => (
-              <li key={a.id}>
-                <button onClick={() => handleSelectAssignment(a)}>
-                  {a.title}
-                </button>
-              </li>
-            ))}
-          </ul>
+    <div className="cp-root">
+      <header className="cp-header">
+        <div className="cp-header-title">PSB Campus</div>
+        <div className="cp-header-subtitle">
+          Заходи не бойся, выходи не плачь
         </div>
+      </header>
 
-        {/* Детали выбранного задания */}
-        <div style={{ flex: 2 }}>
-          {selectedAssignment ? (
-            <>
-              <h3>{selectedAssignment.title}</h3>
-              <p>{selectedAssignment.description}</p>
+      <main className="cp-main">
+        <div className="cp-content">
+          <h2 className="cp-page-title">Курс #{courseId}</h2>
 
-              {currentUser.role === "student" && (
-                <div style={{ marginTop: 16 }}>
-                  <h4>Мой ответ</h4>
-                  <textarea
-                    value={answerText}
-                    onChange={(e) => setAnswerText(e.target.value)}
-                    rows={5}
-                    style={{ width: "100%" }}
-                    placeholder="Вставь сюда текст ответа или ссылку на репозиторий"
-                  />
-                  <br />
-                  <button onClick={handleSubmit} disabled={!answerText}>
-                    Отправить
-                  </button>
+          {/* Материалы курса */}
+          <section className="cp-card" style={{ marginBottom: 16 }}>
+            <h3 className="cp-section-subtitle">Материалы курса</h3>
+            {displayMaterials.length === 0 && (
+              <p className="cp-empty-text">
+                Для этого курса пока нет опубликованных материалов.
+              </p>
+            )}
+            {displayMaterials.length > 0 && (
+              <ul className="cp-materials-list">
+                {displayMaterials.map((m) => (
+                  <li key={m.id} className="cp-material-item">
+                    <div className="cp-material-title">{m.title}</div>
+                    {m.material_type === "text" && m.text && (
+                      <div className="cp-material-body">{m.text}</div>
+                    )}
+                    {m.material_type === "video" && m.url && (
+                      <a
+                        href={m.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="cp-material-link"
+                      >
+                        Смотреть видео
+                      </a>
+                    )}
+                    {m.material_type === "link" && m.url && (
+                      <a
+                        href={m.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="cp-material-link"
+                      >
+                        Перейти по ссылке
+                      </a>
+                    )}
+                    {m.material_type === "file" && m.file && (
+                      <a
+                        href={m.file}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="cp-material-link"
+                      >
+                        Скачать файл
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
+          <div className="cp-layout">
+            {/* Список заданий */}
+            <aside className="cp-sidebar">
+              <h3 className="cp-sidebar-title">Задания</h3>
+              {displayAssignments.length === 0 && (
+                <p className="cp-empty-text">
+                  Для этого курса пока нет заданий.
+                </p>
+              )}
+              <ul className="cp-assignment-list">
+                {displayAssignments.map((a) => (
+                  <li key={a.id}>
+                    <button
+                      className={`cp-assignment-item ${
+                        selectedAssignment?.id === a.id
+                          ? "cp-assignment-item--active"
+                          : ""
+                      }`}
+                      onClick={() => handleSelectAssignment(a)}
+                    >
+                      {a.title}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </aside>
+
+            {/* Область задания */}
+            <section className="cp-main-panel">
+              {!selectedAssignment && (
+                <div className="cp-card">
+                  <p className="cp-empty-text">
+                    Выберите задание слева, чтобы посмотреть детали.
+                  </p>
                 </div>
               )}
 
-              {currentUser.role === "teacher" && (
-                <div style={{ marginTop: 16 }}>
-                  <h4>Работы студентов</h4>
-                  {submissions.length === 0 ? (
-                    <p>Пока нет решений</p>
-                  ) : (
-                    <ul>
-                      {submissions.map((s) => (
-                        <li key={s.id}>
-                          #{s.id} студент {s.student} — статус {s.status} —{" "}
-                          оценка {s.grade ?? "—"}
-                        </li>
-                      ))}
-                    </ul>
+              {selectedAssignment && (
+                <>
+                  <div className="cp-card cp-assignment-card">
+                    <h3 className="cp-assignment-title">
+                      {selectedAssignment.title}
+                    </h3>
+                    <p className="cp-assignment-description">
+                      {selectedAssignment.description ||
+                        "Описание задания пока не заполнено"}
+                    </p>
+                    <p className="cp-assignment-deadline">
+                      Срок сдачи:{" "}
+                      {selectedAssignment.due_date
+                        ? selectedAssignment.due_date
+                        : "не задан"}
+                    </p>
+                  </div>
+
+                  {/* Студент: сдача решения */}
+                  {currentUser.role === "student" && (
+                    <div className="cp-card cp-student-submit-card">
+                      <h4 className="cp-section-subtitle">Моё решение</h4>
+                      <textarea
+                        className="cp-textarea"
+                        value={answerText}
+                        onChange={(e) => setAnswerText(e.target.value)}
+                        rows={5}
+                        placeholder="Текстовое решение или ссылка на репозиторий"
+                      />
+                      <input
+                        className="cp-input"
+                        type="file"
+                        onChange={(e) =>
+                          setFile(e.target.files[0] || null)
+                        }
+                        style={{ marginTop: 8, marginBottom: 8 }}
+                      />
+                      <button
+                        className="cp-primary-button"
+                        onClick={handleSubmit}
+                        disabled={!answerText && !file}
+                      >
+                        Отправить решение
+                      </button>
+                    </div>
                   )}
-                </div>
-              )}
-            </>
-          ) : (
-            <p>Выберите задание слева</p>
-          )}
-        </div>
 
-        {/* Панель назначения студентов — только для преподавателя */}
-        {currentUser.role === "teacher" && (
-          <div style={{ flex: 1 }}>
-            <h3>Назначить курс студенту</h3>
-            <select
-              style={{ width: "100%", padding: 8 }}
-              value={selectedStudentId}
-              onChange={(e) => setSelectedStudentId(e.target.value)}
-            >
-              <option value="">-- выберите студента --</option>
-              {students.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-            <button
-              style={{ marginTop: 8 }}
-              onClick={handleAddStudentToCourse}
-              disabled={!selectedStudentId}
-            >
-              Назначить на курс
-            </button>
+                  {/* Преподаватель: работы студентов */}
+                  {currentUser.role === "teacher" &&
+                    submissions &&
+                    submissions.length > 0 && (
+                      <div className="cp-card cp-teacher-submissions-card">
+                        <h4 className="cp-section-subtitle">
+                          Работы студентов
+                        </h4>
+                        <table className="cp-submissions-table">
+                          <thead>
+                            <tr>
+                              <th>ID</th>
+                              <th>Студент</th>
+                              <th>Ответ</th>
+                              <th>Файл</th>
+                              <th>Оценка</th>
+                              <th>Комментарий</th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {submissions.map((s) => (
+                              <tr key={s.id}>
+                                <td>{s.id}</td>
+                                <td>{s.student}</td>
+                                <td className="cp-submission-answer-cell">
+                                  {s.answer_text}
+                                </td>
+                                <td>
+                                  {s.file && (
+                                    <a
+                                      href={s.file}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                    >
+                                      файл
+                                    </a>
+                                  )}
+                                </td>
+                                <td>
+                                  <input
+                                    className="cp-input cp-input-small"
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    value={
+                                      gradeBySubmission[s.id] ??
+                                      (s.grade ?? "")
+                                    }
+                                    onChange={(e) =>
+                                      handleChangeGrade(s.id, e.target.value)
+                                    }
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    className="cp-input"
+                                    type="text"
+                                    placeholder="Комментарий"
+                                    value={
+                                      commentBySubmission[s.id] ??
+                                      (s.teacher_comment ?? "")
+                                    }
+                                    onChange={(e) =>
+                                      handleChangeComment(
+                                        s.id,
+                                        e.target.value
+                                      )
+                                    }
+                                  />
+                                </td>
+                                <td>
+                                  <button
+                                    className="cp-secondary-button"
+                                    onClick={() =>
+                                      handleGradeSubmission(s.id)
+                                    }
+                                  >
+                                    Сохранить
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                </>
+              )}
+            </section>
           </div>
-        )}
-      </div>
+        </div>
+      </main>
+
+      <footer className="cp-footer">
+        Платформа реализации учебного процесса для ПСБ
+      </footer>
     </div>
   );
 }

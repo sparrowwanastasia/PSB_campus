@@ -28,7 +28,6 @@ function LoginPage({ onLogin, currentUser }) {
 
   return (
     <div className="login-root">
-      {/* Верхняя фиолетовая полоса */}
       <header className="login-header">
         <div className="login-header-title">PSB Campus</div>
         <div className="login-header-subtitle">
@@ -36,7 +35,6 @@ function LoginPage({ onLogin, currentUser }) {
         </div>
       </header>
 
-      {/* Центр — карточка входа */}
       <main className="login-main">
         <div className="login-card">
           <h2 className="login-card-title">Вход</h2>
@@ -73,7 +71,6 @@ function LoginPage({ onLogin, currentUser }) {
         </div>
       </main>
 
-      {/* Нижняя фиолетовая полоса */}
       <footer className="login-footer">
         Платформа реализации учебного процесса для ПСБ
       </footer>

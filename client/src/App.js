@@ -1,57 +1,58 @@
+// client/src/App.js
 import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
 import LoginPage from "./pages/LoginPage";
 import StudentDashboard from "./pages/StudentDashboard";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import CoursePage from "./pages/CoursePage";
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null); // {id, name, role, ...}
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const handleLogin = (user) => {
+    setCurrentUser(user);
+  };
+
+  const requireUser = (element, role = null) => {
+    if (!currentUser) return <Navigate to="/" replace />;
+    if (role && currentUser.role !== role) return <Navigate to="/" replace />;
+    return element;
+  };
 
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
         <Route
           path="/"
-          element={<LoginPage onLogin={setCurrentUser} currentUser={currentUser} />}
+          element={
+            <LoginPage onLogin={handleLogin} currentUser={currentUser} />
+          }
         />
         <Route
           path="/student"
-          element={
-            currentUser && currentUser.role === "student" ? (
-              <StudentDashboard currentUser={currentUser} />
-            ) : (
-              <Navigate to="/" />
-            )
-          }
+          element={requireUser(
+            <StudentDashboard currentUser={currentUser} />,
+            "student"
+          )}
         />
         <Route
           path="/teacher"
-          element={
-            currentUser && currentUser.role === "teacher" ? (
-              <TeacherDashboard currentUser={currentUser} />
-            ) : (
-              <Navigate to="/" />
-            )
-          }
+          element={requireUser(
+            <TeacherDashboard currentUser={currentUser} />,
+            "teacher"
+          )}
         />
         <Route
           path="/course/:courseId"
-          element={
-            currentUser ? (
-              <CoursePage currentUser={currentUser} />
-            ) : (
-              <Navigate to="/" />
-            )
-          }
+          element={requireUser(
+            <CoursePage currentUser={currentUser} />,
+            null // и студент, и преподаватель
+          )}
         />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 

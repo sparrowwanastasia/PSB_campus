@@ -11,9 +11,12 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 REST_FRAMEWORK = {
     # Полностью отключаем аутентификацию для API
     'DEFAULT_AUTHENTICATION_CLASSES': [],
@@ -22,7 +25,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
 }
-
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

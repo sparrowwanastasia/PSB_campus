@@ -1,0 +1,178 @@
+.sd-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Шапка */
+.sd-header {
+  height: 64px;
+  background: #7c6cff;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.sd-header-title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.sd-header-subtitle {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Контент */
+.sd-main {
+  flex: 1;
+  padding: 32px 48px;
+}
+
+.sd-content {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.sd-page-title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.sd-page-subtitle {
+  margin: 0 0 20px;
+  font-size: 14px;
+  color: #666666;
+}
+
+.sd-courses-section {
+  margin-top: 8px;
+}
+
+.sd-section-title {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.sd-empty-text {
+  font-size: 14px;
+  color: #666666;
+}
+
+/* Сетка курсов */
+.sd-courses-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.sd-course-card-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.sd-course-card {
+  width: 260px;
+  min-height: 150px;
+  border-radius: 18px;
+  padding: 16px 18px 14px;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.sd-course-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+
+.sd-course-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.sd-course-description {
+  font-size: 13px;
+  color: #333333;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  padding-top: 8px;
+}
+
+/* Прогресс */
+.sd-course-progress {
+  margin-top: auto;
+}
+
+.sd-course-progress-row {
+  display: flex;
+  justify-content: flex-start;
+  gap: 6px;
+  align-items: baseline;
+  margin-bottom: 4px;
+  font-size: 11px;
+}
+
+.sd-course-progress-perc {
+  font-weight: 600;
+}
+
+.sd-course-progress-label {
+  opacity: 0.9;
+}
+
+.sd-course-progress-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  overflow: hidden;
+}
+
+.sd-course-progress-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: #7c6cff;
+}
+
+/* Подвал */
+.sd-footer {
+  height: 40px;
+  background: #7c6cff;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  padding: 0 48px;
+  font-size: 13px;
+  opacity: 0.95;
+}
+
+/* Адаптив */
+@media (max-width: 800px) {
+  .sd-main {
+    padding: 24px 16px;
+  }
+
+  .sd-header {
+    padding: 0 16px;
+  }
+
+  .sd-header-subtitle {
+    display: none;
+  }
+
+  .sd-courses-grid {
+    justify-content: center;
+  }
+}
+

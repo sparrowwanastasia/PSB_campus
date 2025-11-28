@@ -22,7 +22,6 @@ function TeacherDashboard({ currentUser }) {
   const [colorId, setColorId] = useState(COLOR_PRESETS[0].id);
 
   const [students, setStudents] = useState([]);
-  // для каждого курса храним выбранного студента
   const [selectedStudentByCourse, setSelectedStudentByCourse] = useState({});
 
   const loadCourses = () => {
@@ -50,7 +49,7 @@ function TeacherDashboard({ currentUser }) {
       await createCourse({
         title,
         description,
-        teacher: currentUser.id, // ВАЖНО: именно teacher
+        teacher: currentUser.id,
       });
       setTitle("");
       setDescription("");
@@ -81,7 +80,6 @@ function TeacherDashboard({ currentUser }) {
     try {
       await addStudentToCourse(courseId, studentId);
       alert("Студент назначен на курс");
-      // после назначения студент увидит курс в своём кабинете автоматически
     } catch (e) {
       console.error(e);
       alert("Ошибка при назначении студента");
@@ -90,7 +88,6 @@ function TeacherDashboard({ currentUser }) {
 
   return (
     <div className="td-root">
-      {/* Верхняя фиолетовая полоса */}
       <header className="td-header">
         <div className="td-header-title">PSB Campus</div>
         <div className="td-header-subtitle">
@@ -98,14 +95,12 @@ function TeacherDashboard({ currentUser }) {
         </div>
       </header>
 
-      {/* Основной контент */}
       <main className="td-main">
         <div className="td-content">
           <h2 className="td-page-title">
             Кабинет преподавателя: {currentUser?.name ?? "..."}
           </h2>
 
-          {/* Карточка добавления курса */}
           <section className="td-add-card">
             <h3 className="td-add-title">Добавить новый курс</h3>
 
@@ -152,7 +147,6 @@ function TeacherDashboard({ currentUser }) {
             </button>
           </section>
 
-          {/* Список курсов */}
           <section className="td-courses-section">
             <h3 className="td-section-title">Ваши курсы:</h3>
 
@@ -207,7 +201,6 @@ function TeacherDashboard({ currentUser }) {
                       </div>
                     </Link>
 
-                    {/* Блок назначения студента под карточкой */}
                     <div className="td-course-assign">
                       <select
                         className="td-input"
@@ -219,9 +212,7 @@ function TeacherDashboard({ currentUser }) {
                           )
                         }
                       >
-                        <option value="">
-                          Назначить студенту...
-                        </option>
+                        <option value="">Назначить студенту...</option>
                         {students.map((s) => (
                           <option key={s.id} value={s.id}>
                             {s.name}
@@ -231,7 +222,9 @@ function TeacherDashboard({ currentUser }) {
                       <button
                         className="td-add-button"
                         style={{ marginLeft: 8, padding: "9px 16px" }}
-                        onClick={() => handleAssignStudentToCourse(course.id)}
+                        onClick={() =>
+                          handleAssignStudentToCourse(course.id)
+                        }
                         disabled={!selectedStudentByCourse[course.id]}
                       >
                         Назначить
@@ -245,7 +238,6 @@ function TeacherDashboard({ currentUser }) {
         </div>
       </main>
 
-      {/* Нижняя фиолетовая полоса */}
       <footer className="td-footer">
         Платформа реализации учебного процесса для ПСБ
       </footer>

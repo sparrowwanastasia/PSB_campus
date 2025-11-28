@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Person, Course, CourseStudent, Assignment, Submission
+from .models import Person, Course, CourseStudent, Assignment, Submission, CourseMaterial
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -52,6 +52,16 @@ class AssignmentSerializer(serializers.ModelSerializer):
         model = Assignment
         fields = ['id', 'course', 'title', 'description', 'deadline', 'max_grade']
 
+class CourseMaterialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CourseMaterial
+        fields = "__all__"
+
+
+class SubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Submission
+        fields = "__all__"
 
 class SubmissionSerializer(serializers.ModelSerializer):
     class Meta:

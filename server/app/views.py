@@ -2,7 +2,15 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Person, Course, Assignment, Submission, CourseStudent
-
+from .models import Person, Course, Assignment, Submission, CourseStudent, CourseMaterial
+from .serializers import (
+    PersonSerializer,
+    CourseSerializer,
+    AssignmentSerializer,
+    SubmissionSerializer,
+    SubmissionGradeSerializer,
+    CourseMaterialSerializer,
+)
 from .models import Person, Course, Assignment, Submission
 from .serializers import (
     PersonSerializer,
@@ -12,7 +20,20 @@ from .serializers import (
     SubmissionGradeSerializer,
 )
 
+class CourseMaterialViewSet(viewsets.ModelViewSet):
+    queryset = CourseMaterial.objects.all()
+    serializer_class = CourseMaterialSerializer
 
+    # GET /app/materials/by_course/?course_id=1
+    @action(detail=False, methods=['get'])
+    def by_course(self, request):
+        course_id = request.query_params.get('course_id')
+        if not course_id:
+            return Response({'detail': 'course_id is required'}, status=400)
+
+        qs = CourseMaterial.objects.filter(course_id=course_id).order_by('order', 'id')
+        serializer = self.get_serializer(qs, many=True)
+        return Response(serializer.data)
 class PersonViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
