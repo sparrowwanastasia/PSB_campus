@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchPersons } from "../api";
+import "./LoginPage.css";
 
 function LoginPage({ onLogin, currentUser }) {
   const [persons, setPersons] = useState([]);
@@ -26,33 +27,56 @@ function LoginPage({ onLogin, currentUser }) {
   };
 
   return (
-    <div style={{ padding: 24 }}>
-      <h1>PSB Campus</h1>
-      <p>Выберите пользователя для входа:</p>
+    <div className="login-root">
+      {/* Верхняя фиолетовая полоса */}
+      <header className="login-header">
+        <div className="login-header-title">PSB Campus</div>
+        <div className="login-header-subtitle">
+          Заходи не бойся, выходи не плачь
+        </div>
+      </header>
 
-      <select
-        value={selectedId}
-        onChange={(e) => setSelectedId(e.target.value)}
-      >
-        <option value="">-- выберите --</option>
-        {persons.map((p) => (
-          <option key={p.id} value={p.id}>
-            {p.name} ({p.role})
-          </option>
-        ))}
-      </select>
+      {/* Центр — карточка входа */}
+      <main className="login-main">
+        <div className="login-card">
+          <h2 className="login-card-title">Вход</h2>
 
-      <div style={{ marginTop: 16 }}>
-        <button onClick={handleLogin} disabled={!selectedId}>
-          Войти
-        </button>
-      </div>
+          <label className="login-label">
+            Выберите пользователя:
+            <select
+              className="login-select"
+              value={selectedId}
+              onChange={(e) => setSelectedId(e.target.value)}
+            >
+              <option value="">-- выберите --</option>
+              {persons.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name} ({p.role})
+                </option>
+              ))}
+            </select>
+          </label>
 
-      {currentUser && (
-        <p style={{ marginTop: 16 }}>
-          Текущий пользователь: {currentUser.name} ({currentUser.role})
-        </p>
-      )}
+          <button
+            className="login-button"
+            onClick={handleLogin}
+            disabled={!selectedId}
+          >
+            Войти
+          </button>
+
+          {currentUser && (
+            <p className="login-current-user">
+              Текущий пользователь: {currentUser.name} ({currentUser.role})
+            </p>
+          )}
+        </div>
+      </main>
+
+      {/* Нижняя фиолетовая полоса */}
+      <footer className="login-footer">
+        Платформа реализации учебного процесса для ПСБ
+      </footer>
     </div>
   );
 }

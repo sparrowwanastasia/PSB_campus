@@ -4,6 +4,8 @@ import {
   fetchAssignmentsByCourse,
   createSubmission,
   fetchSubmissionsByAssignment,
+  fetchStudents,
+  addStudentToCourse,
 } from "../api";
 
 function CoursePage({ currentUser }) {
@@ -13,11 +15,20 @@ function CoursePage({ currentUser }) {
   const [answerText, setAnswerText] = useState("");
   const [submissions, setSubmissions] = useState([]);
 
+  const [students, setStudents] = useState([]);
+  const [selectedStudentId, setSelectedStudentId] = useState("");
+
   useEffect(() => {
     fetchAssignmentsByCourse(courseId)
       .then((res) => setAssignments(res.data))
       .catch((err) => console.error(err));
-  }, [courseId]);
+
+    if (currentUser.role === "teacher") {
+      fetchStudents()
+        .then((res) => setStudents(res.data))
+        .catch((err) => console.error(err));
+    }
+  }, [courseId, currentUser.role]);
 
   const loadSubmissions = (assignmentId) => {
     fetchSubmissionsByAssignment(assignmentId)
@@ -48,11 +59,22 @@ function CoursePage({ currentUser }) {
     }
   };
 
+  const handleAddStudentToCourse = async () => {
+    if (!selectedStudentId) return;
+    try {
+      await addStudentToCourse(courseId, selectedStudentId);
+      alert("Студент назначен на курс");
+    } catch (e) {
+      console.error(e);
+      alert("Ошибка при назначении студента");
+    }
+  };
+
   return (
     <div style={{ padding: 24 }}>
       <h2>Курс #{courseId}</h2>
 
-      <div style={{ display: "flex", gap: 32 }}>
+      <div style={{ display: "flex", gap: 32, alignItems: "flex-start" }}>
         {/* Список заданий */}
         <div style={{ flex: 1 }}>
           <h3>Задания</h3>
@@ -113,6 +135,32 @@ function CoursePage({ currentUser }) {
             <p>Выберите задание слева</p>
           )}
         </div>
+
+        {/* Панель назначения студентов — только для преподавателя */}
+        {currentUser.role === "teacher" && (
+          <div style={{ flex: 1 }}>
+            <h3>Назначить курс студенту</h3>
+            <select
+              style={{ width: "100%", padding: 8 }}
+              value={selectedStudentId}
+              onChange={(e) => setSelectedStudentId(e.target.value)}
+            >
+              <option value="">-- выберите студента --</option>
+              {students.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+            <button
+              style={{ marginTop: 8 }}
+              onClick={handleAddStudentToCourse}
+              disabled={!selectedStudentId}
+            >
+              Назначить на курс
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
