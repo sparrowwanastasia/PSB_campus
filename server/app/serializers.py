@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Person, Course, CourseStudent, Assignment, Submission, CourseMaterial
+from .models import Person, Course, CourseStudent, Assignment, Submission, CourseMaterial,SubmissionComment,CourseMessage
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -83,3 +83,17 @@ class SubmissionGradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission
         fields = ['grade', 'feedback', 'status']
+
+class SubmissionCommentSerializer(serializers.ModelSerializer):
+    author_name = serializers.CharField(source="author.name", read_only=True)
+
+    class Meta:
+        model = SubmissionComment
+        fields = ["id", "submission", "author", "author_name", "text", "created_at"]
+
+class CourseMessageSerializer(serializers.ModelSerializer):
+    author_name = serializers.CharField(source="author.name", read_only=True)
+
+    class Meta:
+        model = CourseMessage
+        fields = ["id", "course", "author", "author_name", "text", "created_at"]

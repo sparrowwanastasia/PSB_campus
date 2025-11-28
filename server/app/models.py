@@ -113,3 +113,35 @@ class CourseMaterial(models.Model):
 
     def __str__(self):
         return f"{self.course.title} – {self.title}"
+
+
+class SubmissionComment(models.Model):
+        submission = models.ForeignKey(
+            "Submission",
+            related_name="comments",
+            on_delete=models.CASCADE,
+        )
+        author = models.ForeignKey("Person", on_delete=models.CASCADE)
+        text = models.TextField()
+        created_at = models.DateTimeField(auto_now_add=True)
+
+        class Meta:
+            ordering = ["created_at"]
+
+        def __str__(self):
+            return f"Comment by {self.author} on submission {self.submission_id}"
+class CourseMessage(models.Model):
+    course = models.ForeignKey(
+        Course,
+        related_name="messages",
+        on_delete=models.CASCADE,
+    )
+    author = models.ForeignKey(Person, on_delete=models.CASCADE)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at"]
+
+    def __str__(self):
+        return f"Msg by {self.author} in {self.course_id}"

@@ -1,23 +1,15 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Person, Course, Assignment, Submission, CourseStudent
-from .models import Person, Course, Assignment, Submission, CourseStudent, CourseMaterial
+from .models import Person, Course, Assignment, Submission, CourseStudent, CourseMaterial, SubmissionComment, \
+    CourseMessage
 from .serializers import (
     PersonSerializer,
     CourseSerializer,
     AssignmentSerializer,
     SubmissionSerializer,
     SubmissionGradeSerializer,
-    CourseMaterialSerializer,
-)
-from .models import Person, Course, Assignment, Submission
-from .serializers import (
-    PersonSerializer,
-    CourseSerializer,
-    AssignmentSerializer,
-    SubmissionSerializer,
-    SubmissionGradeSerializer,
+    CourseMaterialSerializer, SubmissionCommentSerializer, CourseMessageSerializer,
 )
 
 class CourseMaterialViewSet(viewsets.ModelViewSet):
@@ -132,3 +124,29 @@ class SubmissionViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(SubmissionSerializer(submission).data)
+class SubmissionCommentViewSet(viewsets.ModelViewSet):
+    queryset = SubmissionComment.objects.all()
+    serializer_class = SubmissionCommentSerializer
+
+    # GET /app/comments/by_submission/?submission_id=1
+    @action(detail=False, methods=["get"])
+    def by_submission(self, request):
+        submission_id = request.query_params.get("submission_id")
+        if not submission_id:
+            return Response({"detail": "submission_id is required"}, status=400)
+        qs = SubmissionComment.objects.filter(submission_id=submission_id)
+        serializer = self.get_serializer(qs, many=True)
+        return Response(serializer.data)
+class CourseMessageViewSet(viewsets.ModelViewSet):
+    queryset = CourseMessage.objects.all()
+    serializer_class = CourseMessageSerializer
+
+    # GET /app/messages/by_course/?course_id=1
+    @action(detail=False, methods=["get"])
+    def by_course(self, request):
+        course_id = request.query_params.get("course_id")
+        if not course_id:
+            return Response({"detail": "course_id is required"}, status=400)
+        qs = CourseMessage.objects.filter(course_id=course_id)
+        serializer = self.get_serializer(qs, many=True)
+        return Response(serializer.data)

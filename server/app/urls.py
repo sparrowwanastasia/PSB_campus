@@ -8,15 +8,18 @@ from .views import (
     AssignmentViewSet,
     SubmissionViewSet,
     CourseMaterialViewSet,
+    SubmissionCommentViewSet,
+    CourseMessageViewSet,  # ←
 )
 
 router = DefaultRouter()
-router.register(r'persons', PersonViewSet, basename='person')
-router.register(r'courses', CourseViewSet, basename='course')
-router.register(r'assignments', AssignmentViewSet, basename='assignment')
-router.register(r'submissions', SubmissionViewSet, basename='submission')
-router.register(r'materials', CourseMaterialViewSet, basename='material')
-
+router.register(r"persons", PersonViewSet, basename="person")
+router.register(r"courses", CourseViewSet, basename="course")
+router.register(r"assignments", AssignmentViewSet, basename="assignment")
+router.register(r"submissions", SubmissionViewSet, basename="submission")
+router.register(r"materials", CourseMaterialViewSet, basename="material")
+router.register(r"comments", SubmissionCommentViewSet, basename="comment")
+router.register(r"messages", CourseMessageViewSet, basename="message")
 urlpatterns = [
     path('', include(router.urls)),
 ]
