@@ -21,6 +21,14 @@
   flex-direction: column;
 }
 
+.topbar-logo-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+}
+
 .topbar-logo {
   font-size: 26px;
   font-weight: 800;
@@ -29,6 +37,13 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  transition: all 0.2s ease;
+}
+
+.topbar-logo-button:hover .topbar-logo {
+  background: linear-gradient(135deg, #a78bfa, #818cf8);
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .topbar-subtitle {
@@ -43,8 +58,26 @@
   gap: 16px;
 }
 
-/* bell */
+/* Ссылка "Курсы" */
+.topbar-courses-link {
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 8px;
+  color: #e5e7eb;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
 
+.topbar-courses-link:hover {
+  background: rgba(148, 163, 184, 0.1);
+  border-color: rgba(148, 163, 184, 0.5);
+}
+
+/* bell */
 .topbar-bell {
   position: relative;
   border: none;
@@ -87,7 +120,6 @@
 }
 
 /* user pill */
-
 .topbar-user-pill {
   display: inline-flex;
   align-items: center;

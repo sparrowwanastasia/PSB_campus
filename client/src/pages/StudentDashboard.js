@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { fetchCoursesByPerson } from "../api";
 import { Link } from "react-router-dom";
 import "./StudentDashboard.css";
+import TopBar from "../components/TopBar";
 
 // Функция для получения класса статуса
 const getStatusClass = (progress) => {
@@ -64,44 +65,7 @@ function StudentDashboard({ currentUser }) {
 
   return (
     <div className="sd-root">
-      <header className="sd-header">
-        <div className="sd-header-title">PSB Campus</div>
-
-        <div className="sd-header-right">
-          <div className="sd-header-subtitle">
-            Заходи не бойся, выходи не плачь
-          </div>
-
-          <div className="sd-notifications">
-            <button
-              className="sd-notify-button"
-              onClick={() => setShowNotifications((v) => !v)}
-            >
-              🔔
-              {notifications.length > 0 && (
-                <span className="sd-notify-badge">
-                  {notifications.length}
-                </span>
-              )}
-            </button>
-
-            {showNotifications && (
-              <div className="sd-notify-popup">
-                {notifications.length === 0 && (
-                  <div className="sd-notify-empty">
-                    Новых курсов нет
-                  </div>
-                )}
-                {notifications.map((n) => (
-                  <div key={n.id} className="sd-notify-item">
-                    {n.text}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </header>
+      <TopBar currentUser={currentUser} />
 
       <main className="sd-main">
         <div className="sd-content">
@@ -165,7 +129,7 @@ function StudentDashboard({ currentUser }) {
 
                 return (
                   <Link
-                    to={`/course/${course.id}`}
+                    to={`/course/${course.id}/topics`}
                     key={course.id}
                     className="sd-course-card-link"
                   >

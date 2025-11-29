@@ -670,3 +670,469 @@
   font-size: 12px;
   border-top: 1px solid rgba(55, 65, 81, 0.9);
 }
+
+/* Модальное окно для лекций - УЛУЧШЕННАЯ ВЕРСИЯ */
+.cp-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px) saturate(180%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: cp-overlay-appear 0.3s ease-out;
+}
+
+@keyframes cp-overlay-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.cp-modal {
+  background: linear-gradient(135deg, 
+    rgba(30, 41, 59, 0.98) 0%,
+    rgba(15, 23, 42, 0.98) 50%,
+    rgba(30, 41, 59, 0.95) 100%);
+  border-radius: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  box-shadow: 
+    0 32px 64px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  padding: 32px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 85vh;
+  position: relative;
+  animation: cp-modal-appear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+}
+
+.cp-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(139, 92, 246, 0.4) 50%, 
+    transparent 100%);
+}
+
+@keyframes cp-modal-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.cp-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  color: #e5e7eb;
+  font-size: 20px;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+.cp-modal-close:hover {
+  background: rgba(239, 68, 68, 0.9);
+  border-color: rgba(239, 68, 68, 0.6);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.cp-modal-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding-right: 50px;
+  color: #f1f5f9;
+  line-height: 1.3;
+  background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.01em;
+}
+
+.cp-modal-content {
+  max-height: calc(85vh - 120px);
+  overflow-y: auto;
+  padding-right: 12px;
+}
+
+/* Кастомный скроллбар для модального окна */
+.cp-modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cp-modal-content::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.4);
+  border-radius: 3px;
+}
+
+.cp-modal-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  border-radius: 3px;
+}
+
+.cp-modal-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #818cf8, #c084fc);
+}
+
+.cp-modal-text {
+  font-size: 16px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  color: #e2e8f0;
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  text-align: left;
+}
+
+.cp-modal-text strong {
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
+/* Кнопка "Читать далее" - УЛУЧШЕННАЯ */
+.cp-read-more {
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.cp-read-more::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.2), 
+    transparent);
+  transition: left 0.5s ease;
+}
+
+.cp-read-more:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.5);
+}
+
+.cp-read-more:hover::before {
+  left: 100%;
+}
+
+.cp-read-more:active {
+  transform: translateY(0);
+}
+
+/* Уменьшенные поля ввода */
+.cp-chat-textarea {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  padding: 10px 12px;
+  font-size: 14px;
+  resize: vertical;
+  background: rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.cp-chat-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+/* Убедимся, что поля ввода заметок тоже ограничены */
+.cp-notes-textarea {
+  min-height: 140px;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Адаптивность для модального окна */
+@media (max-width: 768px) {
+  .cp-modal-overlay {
+    padding: 16px;
+    backdrop-filter: blur(4px) saturate(160%);
+  }
+  
+  .cp-modal {
+    margin: 0;
+    padding: 24px 20px;
+    border-radius: 20px;
+    max-height: 90vh;
+  }
+  
+  .cp-modal-close {
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+  
+  .cp-modal-title {
+    font-size: 18px;
+    padding-right: 40px;
+    margin-bottom: 16px;
+  }
+  
+  .cp-modal-text {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  
+  .cp-modal-content {
+    max-height: calc(90vh - 100px);
+    padding-right: 8px;
+  }
+  
+  .cp-read-more {
+    padding: 5px 10px;
+    font-size: 12px;
+    margin-left: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cp-modal {
+    padding: 20px 16px;
+  }
+  
+  .cp-modal-title {
+    font-size: 16px;
+  }
+  
+  .cp-modal-text {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+}
+
+/* Дополнительные улучшения для текстовых материалов */
+.cp-material-body {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.cp-material-body:hover {
+  background: rgba(99, 102, 241, 0.05);
+  border-radius: 8px;
+  padding: 4px 8px;
+  margin: -4px -8px;
+}
+
+/* Плавная анимация для всего модального окна */
+.cp-modal * {
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+}
+
+/* Эффект параллакса для контента */
+.cp-modal-content {
+  transform: translateZ(0);
+}
+
+
+
+.course-topic-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem 1.5rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.topic-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-button {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  color: #495057;
+}
+
+.nav-button:hover:not(:disabled) {
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.topic-counter {
+  font-weight: 600;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.course-page-header {
+  margin-bottom: 2rem;
+}
+
+.course-page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.course-page-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  line-height: 1.5;
+}
+
+.course-page-content-area {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+/* Навигация между темами */
+.course-topic-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1.25rem 1.5rem;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+}
+
+.topic-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-button {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid rgba(129, 140, 248, 0.4);
+  background: rgba(30, 64, 175, 0.55);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  color: #e5e7eb;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.nav-button:hover:not(:disabled) {
+  background: rgba(129, 140, 248, 0.9);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.7);
+}
+
+.nav-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  background: rgba(107, 114, 128, 0.3);
+}
+
+.topic-counter {
+  font-weight: 600;
+  color: #e5e7eb;
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.course-page-header {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: radial-gradient(circle at top left, rgba(88, 28, 135, 0.16), transparent 55%),
+    rgba(15, 23, 42, 0.95);
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.9);
+}
+
+.cp-page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
+}
+
+.cp-page-subtitle {
+  font-size: 1.1rem;
+  color: #d1d5db;
+  line-height: 1.5;
+}

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Person, Course, CourseStudent, Assignment, Submission, CourseMaterial,SubmissionComment,CourseMessage
+from .models import Person, Course, CourseStudent, Assignment, Submission, CourseMaterial,SubmissionComment,CourseMessage, Topic
 
 
 class PersonSerializer(serializers.ModelSerializer):
@@ -56,6 +56,13 @@ class CourseSerializer(serializers.ModelSerializer):
             course_enrollments__course=obj
         ).distinct()
         return PersonSerializer(students, many=True).data
+
+class TopicSerializer(serializers.ModelSerializer):
+    materials_count = serializers.ReadOnlyField()
+    
+    class Meta:
+        model = Topic
+        fields = ['id', 'course', 'title', 'description', 'color', 'order', 'created_at', 'materials_count']
 
 class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:

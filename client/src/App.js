@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import StudentDashboard from "./pages/StudentDashboard";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import CoursePage from "./pages/CoursePage";
+import CourseTopicsPage from "./pages/CourseTopicsPage";
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -43,13 +44,36 @@ function App() {
             "teacher"
           )}
         />
+        
+        {/* ВАЖНО: Сначала более специфичные маршруты, потом общие */}
+        
+        {/* Новый маршрут для страницы материалов конкретной темы */}
+        <Route
+          path="/course/:courseId/topic/:topicId"
+          element={requireUser(
+            <CoursePage currentUser={currentUser} />,
+            null
+          )}
+        />
+        
+        {/* НОВЫЙ МАРШРУТ - страница тем курса */}
+        <Route
+          path="/course/:courseId/topics"
+          element={requireUser(
+            <CourseTopicsPage currentUser={currentUser} />,
+            null
+          )}
+        />
+        
+        {/* Старый маршрут для обратной совместимости - ДОЛЖЕН БЫТЬ ПОСЛЕДНИМ */}
         <Route
           path="/course/:courseId"
           element={requireUser(
             <CoursePage currentUser={currentUser} />,
-            null // и студент, и преподаватель
+            null
           )}
         />
+        
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

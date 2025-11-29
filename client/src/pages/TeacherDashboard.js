@@ -9,6 +9,7 @@ import {
 } from "../api";
 import { Link } from "react-router-dom";
 import "./TeacherDashboard.css";
+import TopBar from "../components/TopBar";
 
 const COLOR_PRESETS = [
   { id: "coral", label: "Коралловый", value: "#FF6B6B" },
@@ -233,14 +234,7 @@ function TeacherDashboard({ currentUser }) {
 
   return (
     <div className="td-root">
-      <header className="td-header">
-        <div className="td-header-title">PSB Campus</div>
-        <div className="td-header-right">
-          <div className="td-header-subtitle">
-            Кабинет преподавателя
-          </div>
-        </div>
-      </header>
+      <TopBar currentUser={currentUser} />
 
       <main className="td-main">
         <div className="td-content">
@@ -344,7 +338,7 @@ function TeacherDashboard({ currentUser }) {
                     <div key={course.id} className="td-course-card-wrapper">
                       <div className="td-course-card-header">
                         <Link
-                          to={`/course/${course.id}`}
+                          to={`/course/${course.id}/topics`}
                           className="td-course-card-link"
                         >
                           <div

@@ -1,16 +1,19 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Person, Course, Assignment, Submission, CourseStudent, CourseMaterial, SubmissionComment, \
-    CourseMessage
+from .models import Person, Course, Assignment, Submission, CourseStudent, CourseMaterial, SubmissionComment, CourseMessage, Topic  # ДОБАВИТЬ Topic
 from .serializers import (
     PersonSerializer,
     CourseSerializer,
     AssignmentSerializer,
     SubmissionSerializer,
     SubmissionGradeSerializer,
-    CourseMaterialSerializer, SubmissionCommentSerializer, CourseMessageSerializer,
+    CourseMaterialSerializer, 
+    SubmissionCommentSerializer, 
+    CourseMessageSerializer,
+    TopicSerializer,  # ДОБАВИТЬ
 )
+
 
 class CourseMaterialViewSet(viewsets.ModelViewSet):
     queryset = CourseMaterial.objects.all()
@@ -26,6 +29,8 @@ class CourseMaterialViewSet(viewsets.ModelViewSet):
         qs = CourseMaterial.objects.filter(course_id=course_id).order_by('order', 'id')
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)
+
+
 class PersonViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
@@ -37,7 +42,6 @@ class PersonViewSet(viewsets.ModelViewSet):
         if role in ['student', 'teacher']:
             qs = qs.filter(role=role)
         return qs
-
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -86,7 +90,6 @@ class CourseViewSet(viewsets.ModelViewSet):
         return Response({'detail': msg}, status=200)
 
 
-
 class AssignmentViewSet(viewsets.ModelViewSet):
     queryset = Assignment.objects.all()
     serializer_class = AssignmentSerializer
@@ -124,6 +127,8 @@ class SubmissionViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(SubmissionSerializer(submission).data)
+
+
 class SubmissionCommentViewSet(viewsets.ModelViewSet):
     queryset = SubmissionComment.objects.all()
     serializer_class = SubmissionCommentSerializer
@@ -137,6 +142,8 @@ class SubmissionCommentViewSet(viewsets.ModelViewSet):
         qs = SubmissionComment.objects.filter(submission_id=submission_id)
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)
+
+
 class CourseMessageViewSet(viewsets.ModelViewSet):
     queryset = CourseMessage.objects.all()
     serializer_class = CourseMessageSerializer
@@ -148,5 +155,22 @@ class CourseMessageViewSet(viewsets.ModelViewSet):
         if not course_id:
             return Response({"detail": "course_id is required"}, status=400)
         qs = CourseMessage.objects.filter(course_id=course_id)
+        serializer = self.get_serializer(qs, many=True)
+        return Response(serializer.data)
+
+
+# ДОБАВИТЬ VIEWSET ДЛЯ TOPIC
+class TopicViewSet(viewsets.ModelViewSet):
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+
+    # GET /app/topics/by_course/?course_id=1
+    @action(detail=False, methods=['get'])
+    def by_course(self, request):
+        course_id = request.query_params.get('course_id')
+        if not course_id:
+            return Response({'detail': 'course_id is required'}, status=400)
+        
+        qs = Topic.objects.filter(course_id=course_id)
         serializer = self.get_serializer(qs, many=True)
         return Response(serializer.data)

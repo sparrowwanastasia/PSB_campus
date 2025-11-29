@@ -1,6 +1,6 @@
 // client/src/pages/CoursePage.js
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate  } from "react-router-dom";
 import {
   fetchAssignmentsByCourse,
   createSubmission,
@@ -12,6 +12,7 @@ import {
   fetchCourseById,
   fetchMessagesByCourse,
   createCourseMessage,
+  fetchTopicsByCourse,
 } from "../api";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import TopBar from "../components/TopBar";
@@ -27,7 +28,68 @@ const DEMO_MATERIALS = [
       "Основные тезисы:\n" +
       "• частица описывается не траекторией, а волновой функцией;\n" +
       "• вероятность найти частицу в области пространства задаётся квадратом модуля волновой функции;\n" +
-      "• измерение всегда влияет на систему.",
+      "• измерение всегда влияет на систему.\n\n" +
+      "Дополнительные материалы:\n" +
+      "Волновая функция — это комплекснозначная функция, которая описывает квантовое состояние системы. " +
+      "Её квадрат модуля определяет плотность вероятности нахождения частицы в определённой точке пространства. " +
+      "Принцип неопределённости Гейзенберга утверждает, что невозможно одновременно точно измерить координату и импульс частицы. " +
+      "Это фундаментальное свойство квантовых систем, а не ограничение измерительных приборов.\n\n" +
+      "Историческая справка:\n" +
+      "Квантовая механика зародилась в начале XX века благодаря работам Планка, Эйнштейна, Бора, Шрёдингера, Гейзенберга и других учёных. " +
+      "Она радикально изменила наше понимание микромира и привела к созданию новых технологий, включая лазеры, транзисторы и квантовые компьютеры." +
+      "В этой лекции рассматриваем понятия волновой функции, принцип неопределённости и отличие классического и квантового описания.\n\n" +
+      "Основные тезисы:\n" +
+      "• частица описывается не траекторией, а волновой функцией;\n" +
+      "• вероятность найти частицу в области пространства задаётся квадратом модуля волновой функции;\n" +
+      "• измерение всегда влияет на систему.\n\n" +
+      "Дополнительные материалы:\n" +
+      "Волновая функция — это комплекснозначная функция, которая описывает квантовое состояние системы. " +
+      "Её квадрат модуля определяет плотность вероятности нахождения частицы в определённой точке пространства. " +
+      "Принцип неопределённости Гейзенберга утверждает, что невозможно одновременно точно измерить координату и импульс частицы. " +
+      "Это фундаментальное свойство квантовых систем, а не ограничение измерительных приборов.\n\n" +
+      "Историческая справка:\n" +
+      "Квантовая механика зародилась в начале XX века благодаря работам Планка, Эйнштейна, Бора, Шрёдингера, Гейзенберга и других учёных. " +
+      "Она радикально изменила наше понимание микромира и привела к созданию новых технологий, включая лазеры, транзисторы и квантовые компьютеры." +
+      "В этой лекции рассматриваем понятия волновой функции, принцип неопределённости и отличие классического и квантового описания.\n\n" +
+      "Основные тезисы:\n" +
+      "• частица описывается не траекторией, а волновой функцией;\n" +
+      "• вероятность найти частицу в области пространства задаётся квадратом модуля волновой функции;\n" +
+      "• измерение всегда влияет на систему.\n\n" +
+      "Дополнительные материалы:\n" +
+      "Волновая функция — это комплекснозначная функция, которая описывает квантовое состояние системы. " +
+      "Её квадрат модуля определяет плотность вероятности нахождения частицы в определённой точке пространства. " +
+      "Принцип неопределённости Гейзенберга утверждает, что невозможно одновременно точно измерить координату и импульс частицы. " +
+      "Это фундаментальное свойство квантовых систем, а не ограничение измерительных приборов.\n\n" +
+      "Историческая справка:\n" +
+      "Квантовая механика зародилась в начале XX века благодаря работам Планка, Эйнштейна, Бора, Шрёдингера, Гейзенберга и других учёных. " +
+      "Она радикально изменила наше понимание микромира и привела к созданию новых технологий, включая лазеры, транзисторы и квантовые компьютеры." +
+      "В этой лекции рассматриваем понятия волновой функции, принцип неопределённости и отличие классического и квантового описания.\n\n" +
+      "Основные тезисы:\n" +
+      "• частица описывается не траекторией, а волновой функцией;\n" +
+      "• вероятность найти частицу в области пространства задаётся квадратом модуля волновой функции;\n" +
+      "• измерение всегда влияет на систему.\n\n" +
+      "Дополнительные материалы:\n" +
+      "Волновая функция — это комплекснозначная функция, которая описывает квантовое состояние системы. " +
+      "Её квадрат модуля определяет плотность вероятности нахождения частицы в определённой точке пространства. " +
+      "Принцип неопределённости Гейзенберга утверждает, что невозможно одновременно точно измерить координату и импульс частицы. " +
+      "Это фундаментальное свойство квантовых систем, а не ограничение измерительных приборов.\n\n" +
+      "Историческая справка:\n" +
+      "Квантовая механика зародилась в начале XX века благодаря работам Планка, Эйнштейна, Бора, Шрёдингера, Гейзенберга и других учёных. " +
+      "Она радикально изменила наше понимание микромира и привела к созданию новых технологий, включая лазеры, транзисторы и квантовые компьютеры." +
+      "В этой лекции рассматриваем понятия волновой функции, принцип неопределённости и отличие классического и квантового описания.\n\n" +
+      "Основные тезисы:\n" +
+      "• частица описывается не траекторией, а волновой функцией;\n" +
+      "• вероятность найти частицу в области пространства задаётся квадратом модуля волновой функции;\n" +
+      "• измерение всегда влияет на систему.\n\n" +
+      "Дополнительные материалы:\n" +
+      "Волновая функция — это комплекснозначная функция, которая описывает квантовое состояние системы. " +
+      "Её квадрат модуля определяет плотность вероятности нахождения частицы в определённой точке пространства. " +
+      "Принцип неопределённости Гейзенберга утверждает, что невозможно одновременно точно измерить координату и импульс частицы. " +
+      "Это фундаментальное свойство квантовых систем, а не ограничение измерительных приборов.\n\n" +
+      "Историческая справка:\n" +
+      "Квантовая механика зародилась в начале XX века благодаря работам Планка, Эйнштейна, Бора, Шрёдингера, Гейзенберга и других учёных. " +
+      "Она радикально изменила наше понимание микромира и привела к созданию новых технологий, включая лазеры, транзисторы и квантовые компьютеры.",
+      
   },
   {
     id: "demo-m-2",
@@ -65,13 +127,56 @@ const DEMO_ASSIGNMENTS = [
 
 const MAX_NOTES_WIDGETS = 2;
 
+// Модальное окно для лекций
+function LectureModal({ material, isOpen, onClose }) {
+  useEffect(() => {
+    if (!isOpen) return;
+    
+    const handleEsc = (e) => {
+      if (e.keyCode === 27) onClose();
+    };
+    
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, [isOpen, onClose]);
+
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
+  if (!isOpen || !material) return null;
+
+  return (
+    <div className="cp-modal-overlay" onClick={handleOverlayClick}>
+      <div className="cp-modal">
+        <button className="cp-modal-close" onClick={onClose}>
+          ×
+        </button>
+        <h3 className="cp-modal-title">{material.title}</h3>
+        <div className="cp-modal-content">
+          <pre className="cp-modal-text">{material.text}</pre>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function CoursePage({ currentUser }) {
-  const { courseId } = useParams();
+  const { courseId, topicId } = useParams();
+
+  const navigate = useNavigate();
 
   const [course, setCourse] = useState(null);
+  const [topics, setTopics] = useState([]);
+  const [currentTopic, setCurrentTopic] = useState(null);
+  const [currentTopicIndex, setCurrentTopicIndex] = useState(-1);
   const [assignments, setAssignments] = useState([]);
   const [materials, setMaterials] = useState([]);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
+  const [selectedLecture, setSelectedLecture] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [answerText, setAnswerText] = useState("");
   const [file, setFile] = useState(null);
@@ -98,14 +203,17 @@ function CoursePage({ currentUser }) {
   }, [courseId]);
 
   useEffect(() => {
-    fetchAssignmentsByCourse(courseId)
-      .then((res) => setAssignments(res.data))
-      .catch((err) => console.error(err));
-
-    fetchMaterialsByCourse(courseId)
-      .then((res) => setMaterials(res.data))
-      .catch((err) => console.error(err));
-  }, [courseId]);
+  fetchMaterialsByCourse(courseId)
+    .then((res) => {
+      let materials = res.data;
+      // Если есть topicId, фильтруем материалы по теме
+      if (topicId) {
+        materials = materials.filter(material => material.topic === parseInt(topicId));
+      }
+      setMaterials(materials);
+    })
+    .catch((err) => console.error(err));
+}, [courseId, topicId]);
 
   useEffect(() => {
     fetchMessagesByCourse(courseId)
@@ -113,10 +221,62 @@ function CoursePage({ currentUser }) {
       .catch((err) => console.error(err));
   }, [courseId]);
 
+    // Загрузка тем курса
+  useEffect(() => {
+    if (!courseId) return;
+    
+    // Загрузка информации о курсе
+    fetchCourseById(courseId)
+      .then((res) => setCourse(res.data))
+      .catch((err) => console.error(err));
+    
+    // Загрузка всех тем курса
+    fetchTopicsByCourse(courseId)
+      .then((res) => {
+        const topicsData = res.data;
+        setTopics(topicsData);
+        
+        // Найти текущую тему
+        if (topicId) {
+          const topicIndex = topicsData.findIndex(t => t.id === parseInt(topicId));
+          if (topicIndex !== -1) {
+            setCurrentTopic(topicsData[topicIndex]);
+            setCurrentTopicIndex(topicIndex);
+          } else if (topicsData.length > 0) {
+            // Если тема не найдена, перейти к первой теме
+            navigate(`/course/${courseId}/topic/${topicsData[0].id}`);
+          }
+        } else if (topicsData.length > 0) {
+          // Если topicId не указан, перейти к первой теме
+          navigate(`/course/${courseId}/topic/${topicsData[0].id}`);
+        }
+      })
+      .catch((err) => console.error(err));
+  }, [courseId, topicId, navigate]);
+
   const loadSubmissions = (assignmentId) => {
     fetchSubmissionsByAssignment(assignmentId)
       .then((res) => setSubmissions(res.data))
       .catch((err) => console.error(err));
+  };
+
+    // Функции для навигации между темами
+  const goToPreviousTopic = () => {
+    if (currentTopicIndex > 0) {
+      const prevTopic = topics[currentTopicIndex - 1];
+      navigate(`/course/${courseId}/topic/${prevTopic.id}`);
+    }
+  };
+
+  const goToNextTopic = () => {
+    if (currentTopicIndex < topics.length - 1) {
+      const nextTopic = topics[currentTopicIndex + 1];
+      navigate(`/course/${courseId}/topic/${nextTopic.id}`);
+    }
+  };
+
+  const goToTopicsList = () => {
+    navigate(`/course/${courseId}/topics`);
   };
 
   const loadMySubmissionAndComments = (assignmentId) => {
@@ -155,6 +315,16 @@ function CoursePage({ currentUser }) {
     if (currentUser.role === "student" && typeof assignment.id !== "string") {
       loadMySubmissionAndComments(assignment.id);
     }
+  };
+
+  const handleOpenLecture = (material) => {
+    setSelectedLecture(material);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedLecture(null);
   };
 
   const handleSubmit = async () => {
@@ -323,9 +493,51 @@ function CoursePage({ currentUser }) {
 
       <main className="cp-main">
         <div className="cp-content">
-          <h2 className="cp-page-title">
-            {course ? course.title : `Курс #${courseId}`}
-          </h2>
+          {/* Навигационная панель */}
+          {topics.length > 0 && (
+            <div className="course-topic-navigation">
+              <button 
+                onClick={goToTopicsList}
+                className="nav-button back-to-topics"
+              >
+                ← К списку тем
+              </button>
+              
+              <div className="topic-nav-controls">
+                <button 
+                  onClick={goToPreviousTopic}
+                  disabled={currentTopicIndex <= 0}
+                  className="nav-button prev-topic"
+                >
+                  ← Предыдущая тема
+                </button>
+                
+                <span className="topic-counter">
+                  Тема {currentTopicIndex + 1} из {topics.length}
+                </span>
+                
+                <button 
+                  onClick={goToNextTopic}
+                  disabled={currentTopicIndex >= topics.length - 1}
+                  className="nav-button next-topic"
+                >
+                  Следующая тема →
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Заголовок с названием темы */}
+          <div className="course-page-header">
+            <h2 className="cp-page-title">
+              {currentTopic ? currentTopic.title : (course ? course.title : `Курс #${courseId}`)}
+            </h2>
+            {currentTopic && currentTopic.description && (
+              <p className="cp-page-subtitle">
+                {currentTopic.description}
+              </p>
+            )}
+          </div>
 
           {/* Материалы */}
           <section className="cp-card" style={{ marginBottom: 12 }}>
@@ -335,7 +547,19 @@ function CoursePage({ currentUser }) {
                 <li key={m.id} className="cp-material-item">
                   <div className="cp-material-title">{m.title}</div>
                   {m.material_type === "text" && m.text && (
-                    <div className="cp-material-body">{m.text}</div>
+                    <div 
+                      className="cp-material-body"
+                      onClick={() => handleOpenLecture(m)}
+                    >
+                      {m.text.length > 200 ? (
+                        <>
+                          {m.text.slice(0, 200)}...
+                          <button className="cp-read-more">Читать далее</button>
+                        </>
+                      ) : (
+                        m.text
+                      )}
+                    </div>
                   )}
                   {m.material_type === "video" && m.url && (
                     <a
@@ -501,7 +725,7 @@ function CoursePage({ currentUser }) {
                                             Моё решение
                                           </h4>
                                           <textarea
-                                            className="cp-textarea"
+                                            className="cp-textarea cp-chat-textarea"
                                             value={answerText}
                                             onChange={(e) =>
                                               setAnswerText(e.target.value)
@@ -565,7 +789,7 @@ function CoursePage({ currentUser }) {
                                               </ul>
                                             )}
                                             <textarea
-                                              className="cp-textarea"
+                                              className="cp-textarea cp-chat-textarea"
                                               rows={3}
                                               placeholder="Новый комментарий или вопрос"
                                               value={newComment}
@@ -644,7 +868,7 @@ function CoursePage({ currentUser }) {
                                                   </td>
                                                   <td>
                                                     <input
-                                                      className="cp-input"
+                                                      className="cp-input cp-chat-textarea"
                                                       type="text"
                                                       placeholder="Комментарий"
                                                       value={
@@ -796,6 +1020,12 @@ function CoursePage({ currentUser }) {
       <footer className="cp-footer">
         Платформа реализации учебного процесса для ПСБ
       </footer>
+
+      <LectureModal
+        material={selectedLecture}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 }

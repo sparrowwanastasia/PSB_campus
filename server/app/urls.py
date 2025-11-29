@@ -9,7 +9,8 @@ from .views import (
     SubmissionViewSet,
     CourseMaterialViewSet,
     SubmissionCommentViewSet,
-    CourseMessageViewSet,  # ←
+    CourseMessageViewSet,
+    TopicViewSet  # ←
 )
 
 router = DefaultRouter()
@@ -20,6 +21,7 @@ router.register(r"submissions", SubmissionViewSet, basename="submission")
 router.register(r"materials", CourseMaterialViewSet, basename="material")
 router.register(r"comments", SubmissionCommentViewSet, basename="comment")
 router.register(r"messages", CourseMessageViewSet, basename="message")
+router.register(r"topics", TopicViewSet, basename="topic")
 urlpatterns = [
     path('', include(router.urls)),
 ]

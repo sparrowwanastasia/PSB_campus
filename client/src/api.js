@@ -111,3 +111,17 @@ export const createCourseMessage = (payload) =>
   api.post("/messages/", payload);
 
 export default api;
+
+
+// ---------- Темы курса ----------
+//
+
+// Темы по курсу
+export const fetchTopicsByCourse = (courseId) =>
+  api.get("/topics/by_course/", { params: { course_id: courseId } });
+
+// Создать тему
+export const createTopic = (payload) => api.post("/topics/", payload);
+
+// Удалить тему
+export const deleteTopic = (topicId) => api.delete(`/topics/${topicId}/`);
