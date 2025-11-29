@@ -1,253 +1,556 @@
-/* Корень страницы */
+/* client/src/pages/TeacherDashboard.css */
+
 .td-root {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+  font-family: 'Inter', sans-serif;
+  color: #ffffff;
 }
 
-/* Верхняя фиолетовая полоса */
 .td-header {
-  height: 64px;
-  background: #7c6cff;
-  color: #ffffff;
+  height: 80px;
+  padding: 0 48px;
+  background: rgba(15, 15, 15, 0.9);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 48px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .td-header-title {
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .td-header-subtitle {
   font-size: 14px;
-  opacity: 0.9;
+  color: #b2bec3;
 }
 
-/* Основная часть */
 .td-main {
-  flex: 1;
-  padding: 32px 48px;
+  padding: 40px 32px;
 }
 
 .td-content {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 .td-page-title {
-  margin: 0 0 20px;
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0 0 8px;
+  background: linear-gradient(135deg, #ffffff, #a29bfe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Карточка добавления курса */
-.td-add-card {
-  background: #f8f8fb;
-  border-radius: 18px;
-  padding: 24px 28px 20px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+.td-page-subtitle {
+  font-size: 16px;
+  color: #b2bec3;
   margin-bottom: 32px;
-  max-width: 640px;
+}
+
+.td-create-course-button-container {
+  margin-bottom: 32px;
+}
+
+.td-create-course-button {
+  background: linear-gradient(135deg, #6c5ce7, #5d4fd6);
+  color: #ffffff;
+  border: none;
+  padding: 16px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.td-create-course-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(108, 92, 231, 0.6);
+}
+
+.td-create-course-icon {
+  font-size: 20px;
+}
+
+.td-add-card {
+  background: rgba(25, 25, 35, 0.95);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.td-add-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .td-add-title {
-  margin: 0 0 16px;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: #ffffff;
+}
+
+.td-close-form-button {
+  background: none;
+  border: none;
+  color: #b2bec3;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+}
+
+.td-add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .td-add-field {
-  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.td-input,
-.td-select {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid #d0d0e6;
+.td-label {
   font-size: 14px;
-  outline: none;
-  background: #ffffff;
+  color: #b2bec3;
+  margin-bottom: 4px;
+}
+
+.td-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 14px;
   box-sizing: border-box;
 }
 
-.td-input:focus,
-.td-select:focus {
-  border-color: #7c6cff;
-  box-shadow: 0 0 0 2px rgba(124, 108, 255, 0.2);
+.td-input::placeholder {
+  color: #b2bec3;
 }
 
-.td-select {
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, #7c6cff 50%),
-    linear-gradient(135deg, #7c6cff 50%, transparent 50%);
-  background-position: calc(100% - 15px) calc(50% - 3px),
-    calc(100% - 10px) calc(50% - 3px);
-  background-size: 6px 6px, 6px 6px;
+.td-textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+/* Кастомный select контейнер */
+.td-custom-select {
+  position: relative;
+  width: 100%;
+}
+
+.td-custom-select-trigger {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.td-custom-select-trigger:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.td-custom-select-trigger.open {
+  border-color: #6c5ce7;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.2);
+}
+
+.td-custom-select-arrow {
+  transition: transform 0.3s ease;
+  width: 12px;
+  height: 12px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%23b2bec3' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
 }
 
-.td-add-button {
+.td-custom-select-arrow.open {
+  transform: rotate(180deg);
+}
+
+.td-custom-select-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #1a1a2e;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
   margin-top: 4px;
-  padding: 9px 22px;
-  border-radius: 999px;
-  border: none;
-  background: #7c6cff;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.td-custom-select-options.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.td-custom-option {
+  padding: 12px 16px;
   color: #ffffff;
-  font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 10px 22px rgba(124, 108, 255, 0.4);
-  transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.td-custom-option:hover {
+  background: linear-gradient(135deg, #6c5ce7, #5d4fd6);
+}
+
+.td-custom-option:last-child {
+  border-bottom: none;
+}
+
+.td-custom-option.selected {
+  background: rgba(108, 92, 231, 0.2);
+  color: #a29bfe;
+}
+
+.td-form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.td-add-button {
+  background: linear-gradient(135deg, #6c5ce7, #5d4fd6);
+  color: #ffffff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .td-add-button:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 14px 26px rgba(124, 108, 255, 0.45);
-}
-
-.td-add-button:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 8px 16px rgba(124, 108, 255, 0.35);
+  box-shadow: 0 4px 12px rgba(108, 92, 231, 0.4);
 }
 
 .td-add-button:disabled {
-  opacity: 0.55;
-  cursor: default;
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
   box-shadow: none;
 }
 
-/* Раздел курсов */
-.td-courses-section {
-  margin-top: 8px;
+.td-cancel-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: #b2bec3;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.td-cancel-button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 .td-section-title {
-  margin: 0 0 12px;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #ffffff;
 }
 
-.td-empty-text {
-  font-size: 14px;
-  color: #666666;
-}
-
-/* Сетка карточек курсов */
 .td-courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.td-course-card-wrapper {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  flex-direction: column;
 }
 
 .td-course-card-link {
   text-decoration: none;
   color: inherit;
+  flex: 1;
+  display: block;
+}
+
+.td-course-card-link:hover .td-course-card {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
 }
 
 .td-course-card {
-  width: 260px;
-  min-height: 150px;
-  border-radius: 18px;
-  padding: 16px 18px 14px;
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
+  background: rgba(30, 30, 45, 0.9);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex: 1;
+  min-height: 280px;
   display: flex;
   flex-direction: column;
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
+/* Исправление: весь текст в карточках теперь белый для лучшей читаемости */
 .td-course-header {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 8px;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
 }
 
 .td-course-title {
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
+  margin: 0;
+  color: #ffffff; /* Белый цвет для заголовка */
+  flex: 1;
 }
 
-/* Описание курса */
+.td-course-students {
+  font-size: 12px;
+  color: #ffffff; /* Белый цвет вместо #b2bec3 */
+  background: rgba(255, 255, 255, 0.15); /* Немного светлее фон для контраста */
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
 .td-course-description {
-  font-size: 13px;
-  color: #333333;
-  line-height: 1.4;
-  margin-bottom: 12px;
-  border-top: 1px solid rgba(0, 0, 0, 0.25);
-  padding-top: 8px;
+  font-size: 14px;
+  color: #ffffff; /* Белый цвет вместо #e0e0e0 */
+  line-height: 1.5;
+  margin-bottom: 16px;
+  flex: 1;
 }
 
-/* Прогресс */
 .td-course-progress {
   margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2); /* Более заметная граница */
 }
 
 .td-course-progress-row {
   display: flex;
-  justify-content: flex-start;
-  gap: 6px;
-  align-items: baseline;
-  margin-bottom: 4px;
-  font-size: 11px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
+/* Исправление: процент прогресса теперь белый */
 .td-course-progress-perc {
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff; /* Белый цвет вместо #a29bfe */
 }
 
+/* Исправление: текст прогресса теперь белый */
 .td-course-progress-label {
-  opacity: 0.9;
+  font-size: 12px;
+  color: #ffffff; /* Белый цвет вместо #b2bec3 */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .td-course-progress-bar {
+  width: 100%;
   height: 6px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.2); /* Более светлый фон для контраста */
+  border-radius: 3px;
   overflow: hidden;
 }
 
+/* Исправление: полоса прогресса теперь белая */
 .td-course-progress-bar-fill {
   height: 100%;
-  border-radius: inherit;
-  background: #7c6cff;
+  background: #ffffff; /* Белый цвет вместо градиента */
+  transition: width 0.3s ease;
 }
 
-/* Нижняя полоса */
-.td-footer {
-  height: 40px;
-  background: #7c6cff;
-  color: #ffffff;
+/* Исправление: улучшено позиционирование для выпадающего меню студентов */
+.td-course-assign {
   display: flex;
-  align-items: center;
-  padding: 0 48px;
-  font-size: 13px;
-  opacity: 0.95;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  align-items: flex-start;
 }
 
-/* Адаптив */
-@media (max-width: 800px) {
+.td-course-assign .td-custom-select {
+  flex: 1;
+  position: relative;
+  min-width: 0; /* Предотвращает переполнение */
+}
+
+/* Исправление: увеличен z-index и улучшено позиционирование для выпадающего меню студентов */
+.td-course-assign .td-custom-select-options {
+  z-index: 1001;
+  width: 100%;
+  left: 0;
+  right: 0;
+}
+
+.td-assign-button {
+  background: linear-gradient(135deg, #00b894, #00a085);
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  min-width: 100px;
+  transition: all 0.3s ease;
+  flex-shrink: 0; /* Предотвращает сжатие кнопки */
+}
+
+.td-assign-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 184, 148, 0.4);
+}
+
+.td-assign-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.td-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.td-empty-text {
+  font-size: 18px;
+  color: #ffffff;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.td-empty-subtext {
+  font-size: 14px;
+  color: #b2bec3;
+}
+
+.td-footer {
+  background: rgba(15, 15, 15, 0.9);
+  color: #b2bec3;
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.td-footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Кастомный скроллбар */
+.td-custom-select-options::-webkit-scrollbar {
+  width: 6px;
+}
+
+.td-custom-select-options::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.td-custom-select-options::-webkit-scrollbar-thumb {
+  background: #6c5ce7;
+  border-radius: 3px;
+}
+
+.td-custom-select-options::-webkit-scrollbar-thumb:hover {
+  background: #5d4fd6;
+}
+
+@media (max-width: 768px) {
   .td-main {
     padding: 24px 16px;
   }
-
+  
   .td-header {
-    padding: 0 16px;
+    padding: 0 24px;
   }
-
-  .td-header-subtitle {
-    display: none;
-  }
-
+  
   .td-courses-grid {
-    justify-content: center;
+    grid-template-columns: 1fr;
+  }
+  
+  .td-course-assign {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .td-course-assign .td-assign-button {
+    width: 100%;
+  }
+  
+  .td-form-actions {
+    flex-direction: column;
+  }
+  
+  .td-add-button,
+  .td-cancel-button {
+    width: 100%;
   }
 }

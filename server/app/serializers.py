@@ -11,10 +11,12 @@ class PersonSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     # дополнительное поле только для чтения
     progress = serializers.SerializerMethodField()
+    # ДОБАВИТЬ студентов в сериализатор
+    students = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
-        fields = ["id", "title", "description", "teacher", "progress"]
+        fields = ["id", "title", "description", "teacher", "progress", "color", "students"]  # ДОБАВИТЬ color и students
 
     def get_progress(self, obj):
         # сколько заданий на курсе
@@ -46,6 +48,14 @@ class CourseSerializer(serializers.ModelSerializer):
 
         progress = round(100 * submitted_pairs_count / total_pairs)
         return progress
+
+    # ДОБАВИТЬ этот метод для получения списка студентов
+    def get_students(self, obj):
+        from .serializers import PersonSerializer
+        students = Person.objects.filter(
+            course_enrollments__course=obj
+        ).distinct()
+        return PersonSerializer(students, many=True).data
 
 class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:

@@ -24,6 +24,7 @@ class Course(models.Model):
         related_name='courses_teaching',
         limit_choices_to={'role': 'teacher'}
     )
+    color = models.CharField(max_length=7, default='#6c5ce7') 
 
     def __str__(self):
         return self.title

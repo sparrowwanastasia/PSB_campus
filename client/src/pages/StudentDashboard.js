@@ -4,11 +4,12 @@ import { fetchCoursesByPerson } from "../api";
 import { Link } from "react-router-dom";
 import "./StudentDashboard.css";
 
-const COLOR_PRESETS = [
-  { id: "pink", value: "#f8c4c4" },
-  { id: "beige", value: "#e8e1b8" },
-  { id: "blue", value: "#c7dbff" },
-];
+// Функция для получения класса статуса
+const getStatusClass = (progress) => {
+  if (progress >= 100) return "sd-course-status--done";
+  if (progress > 0) return "sd-course-status--in-progress";
+  return "sd-course-status--not-started";
+};
 
 function StudentDashboard({ currentUser }) {
   const [courses, setCourses] = useState([]);
@@ -40,9 +41,17 @@ function StudentDashboard({ currentUser }) {
       .catch((err) => console.error(err));
   }, [currentUser]);
 
-  const getCardColorByIndex = (index) => {
-    const preset = COLOR_PRESETS[index % COLOR_PRESETS.length];
-    return preset.value;
+  // Функция для получения цвета карточки из данных курса (как у преподавателя)
+  const getCardColor = (course) => {
+    // Используем цвет из данных курса с сервера
+    if (course.color) {
+      return course.color;
+    }
+    
+    // На всякий случай оставляем старую логику для обратной совместимости
+    const index = courses.findIndex(c => c.id === course.id);
+    const defaultColors = ["#FF6B6B", "#FFD93D", "#6BCF7F", "#9B7EDE"]; // Те же цвета что у преподавателя
+    return defaultColors[index % defaultColors.length];
   };
 
   const filteredCourses = courses.filter((course) => {
@@ -150,8 +159,8 @@ function StudentDashboard({ currentUser }) {
             )}
 
             <div className="sd-courses-grid">
-              {filteredCourses.map((course, index) => {
-                const bgColor = getCardColorByIndex(index);
+              {filteredCourses.map((course) => {
+                const bgColor = getCardColor(course); // Используем новую функцию
                 const progress = course.progress ?? 0;
 
                 return (
@@ -164,6 +173,9 @@ function StudentDashboard({ currentUser }) {
                       className="sd-course-card"
                       style={{ backgroundColor: bgColor }}
                     >
+                      {/* Статусный индикатор */}
+                      <div className={`sd-course-status ${getStatusClass(progress)}`} />
+                      
                       <div className="sd-course-header">
                         <span className="sd-course-title">
                           {course.title}
@@ -201,6 +213,11 @@ function StudentDashboard({ currentUser }) {
           </section>
         </div>
       </main>
+
+      {/* Геометрические элементы фона */}
+      <div className="sd-geometric-element sd-geo-1"></div>
+      <div className="sd-geometric-element sd-geo-2"></div>
+      <div className="sd-geometric-element sd-geo-3"></div>
 
       <footer className="sd-footer">
         Платформа реализации учебного процесса для ПСБ
