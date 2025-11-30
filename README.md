@@ -22,7 +22,7 @@
 *Визуально интерфейс построен как набор виджетов в стиле iOS-дешборда — блоки можно переставлять, добавлять “Заметки” и собирать своё удобное рабочее пространство под конкретный курс.*
 
 Демонстрация работы через ВИДЕО: 
-https://drive.google.com/file/d/1ewC6VirIYBnrDi1MYg3GkK32lYUk9VLB/view?usp=drive_link
+[https://drive.google.com/file/d/1ewC6VirIYBnrDi1MYg3GkK32lYUk9VLB/view?usp=drive_link](https://drive.google.com/file/d/1ewC6VirIYBnrDi1MYg3GkK32lYUk9VLB/view?usp=sharing)
 
 ## Установка
 1.  Клонируйте репозиторий:
